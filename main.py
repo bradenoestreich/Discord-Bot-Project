@@ -35,6 +35,7 @@ async def on_raw_reaction_add(payload):
   message_id = payload.message_id
 
   if message_id == 876933514069692516:
+
     # I have no idea what these next two lines are doing. Ugh.
     guild_id = payload.guild_id
     guild = discord.utils.find(lambda g : g.id == guild_id, client.guilds)
@@ -94,7 +95,8 @@ async def on_raw_reaction_remove(payload):
       role = discord.utils.get(guild.roles, name = payload.emoji.name)
 
     if role is not None:
-      member = discord.utils.find(lambda m : m.id == payload.user_id, guild.members)
+      guild = await client.fetch_guild(payload.guild_id)
+      member = await guild.fetch_member(payload.user_id)
       if member is not None:
         await member.remove_roles(role)
         print('Role removed.')
